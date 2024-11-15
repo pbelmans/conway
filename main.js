@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
 
 /*************************
  * Conway's game of life *
@@ -107,7 +108,7 @@ function simulate(start, steps = 100) {
   return result;
 }
 
-const steps = 500;
+const steps = 1000;
 
 const generations = simulate(p41, steps);
 generations.forEach((generation, i) => console.log(to_string(generation)));
@@ -141,35 +142,40 @@ const material = new THREE.MeshPhongMaterial({
 });
 
 // list of the cubes in the visualization, per level
-var cubes = [];
-
-const box = new THREE.BoxGeometry(1, 1, 1);
+var levels = [];
 
 generations.map(function (grid, level) {
-  cubes[level] = [];
+  let boxes = [];
 
   for (var i = 0; i < grid.length; i++) {
     for (var j = 0; j < grid[i].length; j++) {
       // if the value is 0 we don't draw anything
       if (!grid[i][j]) continue;
 
-      const cube = new THREE.Mesh(box, material);
+      var box = new THREE.BoxGeometry(1, 1, 1);
+      const M = new THREE.Matrix4().makeTranslation(
+        i - grid.length / 2,
+        j - grid[i].length / 2,
+        level,
+      );
+      box.applyMatrix4(
+        new THREE.Matrix4().makeTranslation(
+          i - grid.length / 2,
+          j - grid[i].length / 2,
+          level,
+        ),
+      );
 
-      // center the grid
-      cube.position.x = i - grid.length / 2;
-      cube.position.y = j - grid[i].length / 2;
-      cube.position.z = level;
-
-      cube.material = material;
-
-      cube.visible = false;
-
-      scene.add(cube);
-
-      // keep track of the cubes
-      cubes[level].push(cube);
+      boxes.push(box);
     }
   }
+
+  const merge = BufferGeometryUtils.mergeGeometries(boxes);
+  var mesh = new THREE.Mesh(merge, material);
+  scene.add(mesh);
+  mesh.visible = false;
+
+  levels.push(mesh);
 });
 
 // build the visualization
@@ -177,16 +183,16 @@ var current = 0;
 setInterval(function () {
   // if we're done: reset everything and start again
   if (current == steps) {
-    cubes.map((generation) => generation.map((cube) => (cube.visible = false)));
+    levels.map((level) => (level.visible = false));
     current = 0;
   }
 
   // show next level
-  cubes[current].map((cube) => (cube.visible = true));
+  levels[current].visible = true;
 
   // increment
   current++;
-}, 20);
+}, 50);
 
 // TODO figure out a good camera position
 camera.position.set(0, -100, 40);
@@ -208,5 +214,7 @@ function animate() {
   controls.update();
 
   renderer.render(scene, camera);
-  console.log(renderer.info.render.calls);
+  // to see how many render calls happen
+  // TODO can we merge geometries?
+  //console.log(renderer.info.render.calls);
 }
