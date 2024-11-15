@@ -132,7 +132,12 @@ renderer.setClearColor(0xeeeeee);
 
 document.body.appendChild(renderer.domElement);
 
-const material = new THREE.MeshBasicMaterial({color: 0xFF0000, side: THREE.DoubleSide, transparent: true, opacity: 0.4});
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff0000,
+  side: THREE.DoubleSide,
+  transparent: true,
+  opacity: 0.4,
+});
 
 generations.map(function (grid, level) {
   for (var i = 0; i < grid.length; i++) {
@@ -161,11 +166,10 @@ const controls = new OrbitControls(camera, renderer.domElement);
 //controls.autoRotate = true;
 
 // light
-const color = 0xFFFFFF;
+const color = 0xffffff;
 const intensity = 1;
 const light = new THREE.AmbientLight(color, intensity);
 scene.add(light);
-
 
 function animate() {
   // makes auto rotation possible
