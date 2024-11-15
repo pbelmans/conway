@@ -10,7 +10,7 @@ function from_string(str) {
 
 // output a string representation
 function to_string(state) {
-  return state.map(row => row.join("")).join("\n");
+  return state.map((row) => row.join("")).join("\n");
 }
 
 // toad, from https://conwaylife.com/wiki/Toad
@@ -71,8 +71,7 @@ function next(current) {
 
 function simulate(start, steps = 100) {
   let result = [start];
-  for (var i = 1; i < steps; i++)
-    result.push(next(result[i - 1]));
+  for (var i = 1; i < steps; i++) result.push(next(result[i - 1]));
   return result;
 }
 
