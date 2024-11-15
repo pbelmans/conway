@@ -193,12 +193,13 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // TODO figure out good center of rotation
 //controls.autoRotate = true;
 
-// light
-const color = 0xffffff;
-const intensity = 5;
-const light = new THREE.DirectionalLight(color, intensity);
-light.position.set(-100, 100, 1000);
-scene.add(light);
+// lights
+const directional = new THREE.DirectionalLight(0xffffff, 5);
+directional.position.set(200, 200, 1000);
+scene.add(directional);
+
+const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+scene.add(ambient);
 
 function animate() {
   // makes auto rotation possible
