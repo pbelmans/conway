@@ -13,6 +13,41 @@ const toad = "000000\n001110\n011100\n000000";
 
 console.log(from_string(toad));
 
+// get the values of the neighbours
+function neighbours(state, i, j) {
+  // let's use the optional chaining operator
+  // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+  return [
+    state[i - 1]?.[j - 1],
+    state[i - 1]?.[j],
+    state[i - 1]?.[j + 1],
+    state[i]?.[j - 1],
+    state[i]?.[j + 1],
+    state[i + 1]?.[j - 1],
+    state[i + 1]?.[j],
+    state[i + 1]?.[j + 1],
+  ];
+}
+
+// next generation
+function next_generation(current) {
+  // copy the current generation
+  var next = current.slice();
+
+  for (var i = 0; i < next.length; i++) {
+    for (var j = 0; j < next[i].length; j++) {
+      console.log(i, j);
+    }
+  }
+
+  return next;
+}
+
+const state = next_generation(from_string(toad));
+console.log(neighbours(state, 0, 0));
+console.log(neighbours(state, 1, 1));
+console.log(neighbours(state, 2, 2));
+
 // Three.js
 
 const scene = new THREE.Scene();
