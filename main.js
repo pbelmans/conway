@@ -13,9 +13,7 @@ async function from_file(filename) {
   let text = await file.text();
 
   // only use non-empty lines that are not comments
-  const lines = text
-    .split(/\r\n|\n/)
-    .filter((line) => line[0] != "!" && line != "");
+  const lines = text.split(/\r\n|\n/).filter((line) => line[0] != "!" && line != "");
 
   // for now I have to pad the .cells files, but eventually we should make it smarter using this
   const width = Math.max.apply(
@@ -29,9 +27,7 @@ async function from_file(filename) {
 
 // toad.cells is modified to include the necessary padding
 const toad = await from_file("/patterns/toad.cells");
-const transqueenbeeshuffle = await from_file(
-  "/patterns/transqueenbeeshuffle.cells",
-);
+const transqueenbeeshuffle = await from_file("/patterns/transqueenbeeshuffle.cells");
 const p41 = await from_file("/patterns/204p41.cells");
 
 // read in a string representation
@@ -73,10 +69,7 @@ function count_live(state, i, j) {
 // next generation
 function next(current) {
   // empty grid
-  var next = Array.from(
-    Array(current.length),
-    () => new Array(current[0].length),
-  );
+  var next = Array.from(Array(current.length), () => new Array(current[0].length));
 
   // rules of Conway's game of life
   for (var i = 0; i < next.length; i++) {

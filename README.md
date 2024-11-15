@@ -12,7 +12,6 @@ npx vite
 
 starts a webserver at http://localhost:5173
 
-
 ## Code style
 
 Just for fun: use Prettier
