@@ -28,7 +28,9 @@ async function from_file(filename) {
 
 // toad.cells is modified to include the necessary padding
 const toad = await from_file("/patterns/toad.cells");
-const transqueenbeeshuttle = await from_file("/patterns/transqueenbeeshuffle.cells");
+const transqueenbeeshuttle = await from_file(
+  "/patterns/transqueenbeeshuffle.cells",
+);
 console.log(transqueenbeeshuttle);
 const p41 = await from_file("/patterns/204p41.cells");
 
@@ -108,7 +110,7 @@ function simulate(start, steps = 100) {
 
 const steps = 500;
 
-const generations = simulate(transqueenbeeshuttle, steps);
+const generations = simulate(p41, steps);
 generations.forEach((generation, i) => console.log(to_string(generation)));
 
 /*****************
@@ -150,7 +152,7 @@ generations.map(function (grid, level) {
       // if the value is 0 we don't draw anything
       if (!grid[i][j]) continue;
 
-      const box = new THREE.BoxGeometry(1, 1, 1)
+      const box = new THREE.BoxGeometry(1, 1, 1);
       const cube = new THREE.Mesh(box, material);
 
       // center the grid
@@ -172,15 +174,15 @@ generations.map(function (grid, level) {
 
 // build the visualization
 var current = 0;
-setInterval(function() {
+setInterval(function () {
   // if we're done: reset everything and start again
   if (current == steps) {
-    cubes.map(generation => generation.map(cube => cube.visible = false));
+    cubes.map((generation) => generation.map((cube) => (cube.visible = false)));
     current = 0;
   }
 
   // show next level
-  cubes[current].map(cube => cube.visible = true);
+  cubes[current].map((cube) => (cube.visible = true));
 
   // increment
   current++;
