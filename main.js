@@ -5,7 +5,7 @@ import * as THREE from "three";
 // read in a string representation
 function from_string(str) {
   const matrix = str.split("\n").map((line) => line.split(""));
-  return matrix.map((row) => row.map((i) => parseInt(i)));
+  return matrix.map((row) => row.map((value) => parseInt(value)));
 }
 
 // toad, from https://conwaylife.com/wiki/Toad
@@ -29,24 +29,39 @@ function neighbours(state, i, j) {
   ];
 }
 
+// count the number of live neighbours
+function count_live(state, i, j) {
+  return neighbours(state, i, j).filter((value) => value == 1).length;
+}
+
 // next generation
 function next_generation(current) {
-  // copy the current generation
-  var next = current.slice();
+  var next = Array.from(
+    Array(current.length),
+    () => new Array(current[0].length),
+  );
 
   for (var i = 0; i < next.length; i++) {
     for (var j = 0; j < next[i].length; j++) {
-      console.log(i, j);
+      const count = count_live(current, i, j);
+      // cell is alive
+      if (current[i][j] == 1) {
+        if (count == 2 || count == 3) next[i][j] = 1;
+        else next[i][j] = 0;
+      }
+      // cell is dead
+      else {
+        if (count == 3) next[i][j] = 1;
+        else next[i][j] = 0;
+      }
     }
   }
 
   return next;
 }
 
-const state = next_generation(from_string(toad));
-console.log(neighbours(state, 0, 0));
-console.log(neighbours(state, 1, 1));
-console.log(neighbours(state, 2, 2));
+console.log(next_generation(from_string(toad)));
+console.log(next_generation(next_generation(from_string(toad))));
 
 // Three.js
 
