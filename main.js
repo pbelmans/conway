@@ -1,5 +1,20 @@
 import * as THREE from "three";
 
+// Conway's game of life
+
+// read in a string representation
+function from_string(str) {
+  const matrix = str.split("\n").map((line) => line.split(""));
+  return matrix.map((row) => row.map((i) => parseInt(i)));
+}
+
+// toad, from https://conwaylife.com/wiki/Toad
+const toad = "000000\n001110\n011100\n000000";
+
+console.log(from_string(toad));
+
+// Three.js
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
