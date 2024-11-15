@@ -1,6 +1,28 @@
 import * as THREE from "three";
 
-// Conway's game of life
+/*************************
+ * Conway's game of life *
+ *************************/
+
+// read it in from a plaintext file
+// . is 0 and O is 1
+async function from_file(filename) {
+  let file = await fetch(filename);
+  let text = await file.text();
+
+  // only use non-empty lines that are not comments
+  const lines = text.split(/\r\n|\n/).filter(line => line[0] != "!" && line != "");
+
+  // for now I have to pad the .cells files, but eventually we should make it smarter using this
+  const width = Math.max.apply(Math, lines.map(line => line.length));
+  const height = lines.length;
+
+  return from_string(lines.join("\n"));
+}
+
+// toad.cells is modified to include the necessary padding
+const toad = await from_file("/patterns/toad.cells");
+const p41 = await from_file("/patterns/204p41.cells");
 
 // read in a string representation
 function from_string(str) {
@@ -12,9 +34,6 @@ function from_string(str) {
 function to_string(state) {
   return state.map((row) => row.join("")).join("\n").replaceAll("0", ".").replaceAll("1", "O");
 }
-
-// toad, from https://conwaylife.com/wiki/Toad
-const toad = from_string("......\n..OOO.\n.OOO..\n......");
 
 // get the values of the neighbours
 function neighbours(state, i, j) {
