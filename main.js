@@ -14,7 +14,7 @@ function to_string(state) {
 }
 
 // toad, from https://conwaylife.com/wiki/Toad
-const toad = "000000\n001110\n011100\n000000";
+const toad = from_string("000000\n001110\n011100\n000000");
 
 // get the values of the neighbours
 function neighbours(state, i, j) {
@@ -38,7 +38,7 @@ function count_live(state, i, j) {
 }
 
 // next generation
-function step(current) {
+function next(current) {
   // empty grid
   var next = Array.from(
     Array(current.length),
@@ -68,6 +68,15 @@ function step(current) {
 
   return next;
 }
+
+function simulate(start, steps = 100) {
+  let result = [start];
+  for (var i = 1; i < steps; i++)
+    result.push(next(result[i - 1]));
+  return result;
+}
+
+console.log(simulate(toad, 10).map(to_string));
 
 // Three.js
 
