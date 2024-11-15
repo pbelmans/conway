@@ -5,16 +5,16 @@ import * as THREE from "three";
 // read in a string representation
 function from_string(str) {
   const matrix = str.split("\n").map((line) => line.split(""));
-  return matrix.map((row) => row.map((value) => parseInt(value)));
+  return matrix.map((row) => row.map((value) => (value == "." ? 0 : 1)));
 }
 
 // output a string representation
 function to_string(state) {
-  return state.map((row) => row.join("")).join("\n");
+  return state.map((row) => row.join("")).join("\n").replaceAll("0", ".").replaceAll("1", "O");
 }
 
 // toad, from https://conwaylife.com/wiki/Toad
-const toad = from_string("000000\n001110\n011100\n000000");
+const toad = from_string("......\n..OOO.\n.OOO..\n......");
 
 // get the values of the neighbours
 function neighbours(state, i, j) {
@@ -75,9 +75,12 @@ function simulate(start, steps = 100) {
   return result;
 }
 
-console.log(simulate(toad, 10).map(to_string));
+const generations = simulate(toad, 10);
+generations.forEach((generation, i) => console.log(to_string(generation)));
 
-// Three.js
+/*****************
+ * Visualisation *
+ *****************/
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
