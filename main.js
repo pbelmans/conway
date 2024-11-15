@@ -8,6 +8,11 @@ function from_string(str) {
   return matrix.map((row) => row.map((value) => parseInt(value)));
 }
 
+// output a string representation
+function to_string(state) {
+  return state.map(row => row.join("")).join("\n");
+}
+
 // toad, from https://conwaylife.com/wiki/Toad
 const toad = "000000\n001110\n011100\n000000";
 
@@ -35,7 +40,7 @@ function count_live(state, i, j) {
 }
 
 // next generation
-function next_generation(current) {
+function step(current) {
   var next = Array.from(
     Array(current.length),
     () => new Array(current[0].length),
@@ -60,8 +65,8 @@ function next_generation(current) {
   return next;
 }
 
-console.log(next_generation(from_string(toad)));
-console.log(next_generation(next_generation(from_string(toad))));
+console.log(to_string(step(from_string(toad))));
+console.log(step(step(from_string(toad))));
 
 // Three.js
 
