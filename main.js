@@ -144,6 +144,8 @@ const material = new THREE.MeshPhongMaterial({
 // list of the cubes in the visualization, per level
 var cubes = [];
 
+const box = new THREE.BoxGeometry(1, 1, 1);
+
 generations.map(function (grid, level) {
   cubes[level] = [];
 
@@ -152,7 +154,6 @@ generations.map(function (grid, level) {
       // if the value is 0 we don't draw anything
       if (!grid[i][j]) continue;
 
-      const box = new THREE.BoxGeometry(1, 1, 1);
       const cube = new THREE.Mesh(box, material);
 
       // center the grid
