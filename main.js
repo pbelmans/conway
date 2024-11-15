@@ -138,10 +138,15 @@ const material = new THREE.MeshBasicMaterial({
   color: 0xff0000,
   side: THREE.DoubleSide,
   transparent: true,
-  opacity: 0.4,
+  opacity: 0.6,
 });
 
+// list of the cubes in the visualization, per level
+var cubes = [];
+
 generations.map(function (grid, level) {
+  cubes[level] = [];
+
   for (var i = 0; i < grid.length; i++) {
     for (var j = 0; j < grid[i].length; j++) {
       if (!grid[i][j]) continue;
@@ -155,10 +160,30 @@ generations.map(function (grid, level) {
 
       cube.material = material;
 
+      cube.visible = false;
+
       scene.add(cube);
+
+      cubes[level].push(cube);
     }
   }
 });
+
+// build the visualization
+var current = 0;
+setInterval(function() {
+  // if we're done: reset everything and start again
+  if (current == steps) {
+    cubes.map(generation => generation.map(cube => cube.visible = false));
+    current = 0;
+  }
+
+  // show next level
+  cubes[current].map(cube => cube.visible = true);
+
+  // increment
+  current++;
+}, 50);
 
 // TODO figure out a good camera position
 camera.position.set(0, -100, 40);
