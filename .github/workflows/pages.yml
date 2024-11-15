@@ -1,7 +1,6 @@
 name: Deploy to GitHub Pages
 
-on:
-  [push]
+on: [push]
 
 permissions:
   id-token: write
@@ -49,6 +48,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./github-deploy
           publish_branch: dist
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
           force_orphan: true

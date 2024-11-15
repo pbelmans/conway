@@ -11,10 +11,15 @@ async function from_file(filename) {
   let text = await file.text();
 
   // only use non-empty lines that are not comments
-  const lines = text.split(/\r\n|\n/).filter(line => line[0] != "!" && line != "");
+  const lines = text
+    .split(/\r\n|\n/)
+    .filter((line) => line[0] != "!" && line != "");
 
   // for now I have to pad the .cells files, but eventually we should make it smarter using this
-  const width = Math.max.apply(Math, lines.map(line => line.length));
+  const width = Math.max.apply(
+    Math,
+    lines.map((line) => line.length),
+  );
   const height = lines.length;
 
   return from_string(lines.join("\n"));
@@ -32,7 +37,11 @@ function from_string(str) {
 
 // output a string representation
 function to_string(state) {
-  return state.map((row) => row.join("")).join("\n").replaceAll("0", ".").replaceAll("1", "O");
+  return state
+    .map((row) => row.join(""))
+    .join("\n")
+    .replaceAll("0", ".")
+    .replaceAll("1", "O");
 }
 
 // get the values of the neighbours
