@@ -16,8 +16,6 @@ function to_string(state) {
 // toad, from https://conwaylife.com/wiki/Toad
 const toad = "000000\n001110\n011100\n000000";
 
-console.log(from_string(toad));
-
 // get the values of the neighbours
 function neighbours(state, i, j) {
   // let's use the optional chaining operator
@@ -41,22 +39,28 @@ function count_live(state, i, j) {
 
 // next generation
 function step(current) {
+  // empty grid
   var next = Array.from(
     Array(current.length),
     () => new Array(current[0].length),
   );
 
+  // rules of Conway's game of life
   for (var i = 0; i < next.length; i++) {
     for (var j = 0; j < next[i].length; j++) {
       const count = count_live(current, i, j);
       // cell is alive
       if (current[i][j] == 1) {
+        // stay alive if 2 or 3 neighbours
         if (count == 2 || count == 3) next[i][j] = 1;
+        // die of starvation or overcrowding
         else next[i][j] = 0;
       }
       // cell is dead
       else {
+        // become alive if exactly 3 neighbours
         if (count == 3) next[i][j] = 1;
+        // stay dead otherwise
         else next[i][j] = 0;
       }
     }
@@ -64,9 +68,6 @@ function step(current) {
 
   return next;
 }
-
-console.log(to_string(step(from_string(toad))));
-console.log(step(step(from_string(toad))));
 
 // Three.js
 
