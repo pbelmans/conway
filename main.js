@@ -28,6 +28,8 @@ async function from_file(filename) {
 
 // toad.cells is modified to include the necessary padding
 const toad = await from_file("/patterns/toad.cells");
+const transqueenbeeshuttle = await from_file("/patterns/transqueenbeeshuffle.cells");
+console.log(transqueenbeeshuttle);
 const p41 = await from_file("/patterns/204p41.cells");
 
 // read in a string representation
@@ -106,7 +108,7 @@ function simulate(start, steps = 100) {
 
 const steps = 50;
 
-const generations = simulate(p41, steps);
+const generations = simulate(transqueenbeeshuttle, steps);
 generations.forEach((generation, i) => console.log(to_string(generation)));
 
 /*****************
