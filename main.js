@@ -106,7 +106,7 @@ function simulate(start, steps = 100) {
   return result;
 }
 
-const steps = 50;
+const steps = 500;
 
 const generations = simulate(transqueenbeeshuttle, steps);
 generations.forEach((generation, i) => console.log(to_string(generation)));
@@ -134,11 +134,9 @@ renderer.setClearColor(0xeeeeee);
 
 document.body.appendChild(renderer.domElement);
 
-const material = new THREE.MeshBasicMaterial({
+const material = new THREE.MeshPhongMaterial({
   color: 0xff0000,
   side: THREE.DoubleSide,
-  transparent: true,
-  opacity: 0.6,
 });
 
 // list of the cubes in the visualization, per level
@@ -149,13 +147,15 @@ generations.map(function (grid, level) {
 
   for (var i = 0; i < grid.length; i++) {
     for (var j = 0; j < grid[i].length; j++) {
+      // if the value is 0 we don't draw anything
       if (!grid[i][j]) continue;
 
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const cube = new THREE.Mesh(geometry, material);
+      const box = new THREE.BoxGeometry(1, 1, 1)
+      const cube = new THREE.Mesh(box, material);
 
-      cube.position.x = i;
-      cube.position.y = j;
+      // center the grid
+      cube.position.x = i - grid.length / 2;
+      cube.position.y = j - grid[i].length / 2;
       cube.position.z = level;
 
       cube.material = material;
@@ -164,6 +164,7 @@ generations.map(function (grid, level) {
 
       scene.add(cube);
 
+      // keep track of the cubes
       cubes[level].push(cube);
     }
   }
@@ -183,7 +184,7 @@ setInterval(function() {
 
   // increment
   current++;
-}, 50);
+}, 20);
 
 // TODO figure out a good camera position
 camera.position.set(0, -100, 40);
@@ -194,8 +195,9 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 // light
 const color = 0xffffff;
-const intensity = 1;
-const light = new THREE.AmbientLight(color, intensity);
+const intensity = 5;
+const light = new THREE.DirectionalLight(color, intensity);
+light.position.set(-100, 100, 1000);
 scene.add(light);
 
 function animate() {
@@ -203,4 +205,5 @@ function animate() {
   controls.update();
 
   renderer.render(scene, camera);
+  console.log(renderer.info.render.calls);
 }
