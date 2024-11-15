@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 /*************************
  * Conway's game of life *
@@ -118,21 +119,39 @@ const camera = new THREE.PerspectiveCamera(
   1000,
 );
 
+// configuring the renderer
 const renderer = new THREE.WebGLRenderer();
+// fullscreen
 renderer.setSize(window.innerWidth, window.innerHeight);
+// animated
 renderer.setAnimationLoop(animate);
+// set a near white clear color (default is black)
+renderer.setClearColor(0xeeeeee);
+
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+const controls = new OrbitControls(camera, renderer.domElement);
 
-camera.position.z = 5;
+generations.map(function (grid, level) {
+  for (var i = 0; i < grid.length; i++) {
+    for (var j = 0; j < grid[i].length; j++) {
+      if (!grid[i][j]) continue;
+
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const cube = new THREE.Mesh(geometry, material);
+
+      cube.position.x = i;
+      cube.position.y = j;
+      cube.position.z = level;
+
+      scene.add(cube);
+    }
+  }
+});
+
+camera.position.z = 20;
 
 function animate() {
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-
   renderer.render(scene, camera);
 }
