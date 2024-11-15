@@ -104,7 +104,9 @@ function simulate(start, steps = 100) {
   return result;
 }
 
-const generations = simulate(toad, 10);
+const steps = 50;
+
+const generations = simulate(p41, steps);
 generations.forEach((generation, i) => console.log(to_string(generation)));
 
 /*****************
@@ -130,7 +132,7 @@ renderer.setClearColor(0xeeeeee);
 
 document.body.appendChild(renderer.domElement);
 
-const controls = new OrbitControls(camera, renderer.domElement);
+const material = new THREE.MeshBasicMaterial({color: 0xFF0000, side: THREE.DoubleSide, transparent: true, opacity: 0.4});
 
 generations.map(function (grid, level) {
   for (var i = 0; i < grid.length; i++) {
@@ -138,20 +140,36 @@ generations.map(function (grid, level) {
       if (!grid[i][j]) continue;
 
       const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
       const cube = new THREE.Mesh(geometry, material);
 
       cube.position.x = i;
       cube.position.y = j;
       cube.position.z = level;
 
+      cube.material = material;
+
       scene.add(cube);
     }
   }
 });
 
-camera.position.z = 20;
+// TODO figure out a good camera position
+camera.position.set(0, -100, 40);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+// TODO figure out good center of rotation
+//controls.autoRotate = true;
+
+// light
+const color = 0xFFFFFF;
+const intensity = 1;
+const light = new THREE.AmbientLight(color, intensity);
+scene.add(light);
+
 
 function animate() {
+  // makes auto rotation possible
+  controls.update();
+
   renderer.render(scene, camera);
 }
