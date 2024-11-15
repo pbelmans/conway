@@ -28,10 +28,9 @@ async function from_file(filename) {
 
 // toad.cells is modified to include the necessary padding
 const toad = await from_file("/patterns/toad.cells");
-const transqueenbeeshuttle = await from_file(
+const transqueenbeeshuffle = await from_file(
   "/patterns/transqueenbeeshuffle.cells",
 );
-console.log(transqueenbeeshuttle);
 const p41 = await from_file("/patterns/204p41.cells");
 
 // read in a string representation
