@@ -13,28 +13,31 @@ async function from_file(filename) {
   let text = await file.text();
 
   // only use lines that are not comments
-  let lines = text.trimEnd().split(/\r\n|\n/).filter((line) => line[0] != "!");
+  let lines = text
+    .trimEnd()
+    .split(/\r\n|\n/)
+    .filter((line) => line[0] != "!");
 
   // pad lines with O's if variable length lines are used
   const width = Math.max.apply(
     Math,
     lines.map((line) => line.length),
   );
-  lines = lines.map((line) => line.concat(".".repeat(width - line.length)))
+  lines = lines.map((line) => line.concat(".".repeat(width - line.length)));
 
   return from_string(lines.join("\n"));
 }
 
-// toad.cells is modified to include the necessary padding
 const toad = await from_file("/patterns/toad.cells");
 const transqueenbeeshuffle = await from_file("/patterns/transqueenbeeshuffle.cells");
 const p41 = await from_file("/patterns/204p41.cells");
 const p60glidershuttle = await from_file("/patterns/p60glidershuttle.cells");
 const gourmet = await from_file("/patterns/gourmet.cells");
 const spider = await from_file("/patterns/spider.cells");
+const p65p48 = await from_file("/patterns/65p48.cells");
 
 // the choices we make
-const game_of_life = spider;
+const game_of_life = p65p48;
 const steps = 1000;
 
 // read in a string representation
