@@ -159,6 +159,7 @@ const material = new THREE.MeshPhongMaterial({
 // list of the cubes in the visualization, per level
 let levels = [];
 
+// draw every generation
 generations.map(function (grid, level) {
   let boxes = [];
 
@@ -185,9 +186,12 @@ generations.map(function (grid, level) {
     }
   }
 
+  // merge the boxes per level for performance reasons
   const merge = BufferGeometryUtils.mergeGeometries(boxes);
   let mesh = new THREE.Mesh(merge, material);
   scene.add(mesh);
+
+  // hide every level by default
   mesh.visible = false;
 
   levels.push(mesh);
@@ -227,6 +231,9 @@ scene.add(ambient);
 function animate() {
   // makes auto rotation possible
   controls.update();
+
+  camera.lookAt(0, 0, current);
+  camera.position.set(camera.position.x, camera.position.y, 50 + current);
 
   renderer.render(scene, camera);
   // to see how many render calls happen
