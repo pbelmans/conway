@@ -20,7 +20,7 @@ async function from_file(filename) {
     Math,
     lines.map((line) => line.length),
   );
-  lines = lines.map((line) => line.concat("O".repeat(width - line.length)))
+  lines = lines.map((line) => line.concat(".".repeat(width - line.length)))
 
   return from_string(lines.join("\n"));
 }
