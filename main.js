@@ -67,7 +67,25 @@ function count_live(state, i, j) {
 }
 
 // next generation
-function next(current) {
+function next(previous) {
+  let current = previous;
+
+  // count the number of live cells on the edges
+  let on_edges = 0;
+  for (let i = 0; i < previous.length; i++)
+    on_edges += previous[i][0] + previous[i][previous[i].length - 1];
+  for (let i = 1; i < previous[0].length - 1; i++)
+    on_edges += previous[0][i] + previous[previous.length - 1][i];
+
+  // increase the grid size if there are live cells on the edges
+  if (on_edges) {
+    current = [].concat(
+      [Array(previous[0].length + 2).fill(0)],
+      previous.map((row) => [].concat([0], row, [0])),
+      [Array(previous[0].length + 2).fill(0)],
+    );
+  }
+
   // empty grid
   let next = Array.from(Array(current.length), () => new Array(current[0].length));
 
