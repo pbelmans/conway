@@ -32,6 +32,9 @@ const p41 = await from_file("/patterns/204p41.cells");
 const p60glidershuttle = await from_file("/patterns/p60glidershuttle.cells");
 const gourmet = await from_file("/patterns/gourmet.cells");
 
+// the choices we make
+const game_of_life = toad;
+const steps = 1000;
 
 // read in a string representation
 function from_string(str) {
@@ -122,10 +125,8 @@ function simulate(start, steps = 100) {
   return result;
 }
 
-const steps = 1000;
-
-const generations = simulate(p41, steps);
-generations.forEach((generation, i) => console.log(to_string(generation)));
+const generations = simulate(game_of_life, steps);
+//generations.forEach((generation, i) => console.log(to_string(generation)));
 
 /*****************
  * Visualisation *
