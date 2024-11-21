@@ -35,9 +35,10 @@ const p60glidershuttle = await from_file("/patterns/p60glidershuttle.cells");
 const gourmet = await from_file("/patterns/gourmet.cells");
 const spider = await from_file("/patterns/spider.cells");
 const p65p48 = await from_file("/patterns/65p48.cells");
+const gosperglidergun = await from_file("/patterns/gosperglidergun.cells");
 
 // the choices we make
-const game_of_life = p65p48;
+const game_of_life = gosperglidergun;
 const steps = 1000;
 
 // read in a string representation
