@@ -12,15 +12,15 @@ async function from_file(filename) {
   let file = await fetch(filename);
   let text = await file.text();
 
-  // only use non-empty lines that are not comments
-  const lines = text.split(/\r\n|\n/).filter((line) => line[0] != "!" && line != "");
+  // only use lines that are not comments
+  let lines = text.trimEnd().split(/\r\n|\n/).filter((line) => line[0] != "!");
 
-  // for now I have to pad the .cells files, but eventually we should make it smarter using this
+  // pad lines with O's if variable length lines are used
   const width = Math.max.apply(
     Math,
     lines.map((line) => line.length),
   );
-  const height = lines.length;
+  lines = lines.map((line) => line.concat("O".repeat(width - line.length)))
 
   return from_string(lines.join("\n"));
 }
@@ -29,6 +29,9 @@ async function from_file(filename) {
 const toad = await from_file("/patterns/toad.cells");
 const transqueenbeeshuffle = await from_file("/patterns/transqueenbeeshuffle.cells");
 const p41 = await from_file("/patterns/204p41.cells");
+const p60glidershuttle = await from_file("/patterns/p60glidershuttle.cells");
+const gourmet = await from_file("/patterns/gourmet.cells");
+
 
 // read in a string representation
 function from_string(str) {
