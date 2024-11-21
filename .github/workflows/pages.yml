@@ -26,6 +26,8 @@ jobs:
         run: npm install three
       - name: Build
         run: npm run build
+      - name: Make sure CNAME is there
+        run: echo "conway.ncag.info" > dist/CNAME
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
