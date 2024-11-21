@@ -151,6 +151,10 @@ renderer.setClearColor(0xeeeeee);
 
 document.body.appendChild(renderer.domElement);
 
+const controls = new OrbitControls(camera, renderer.domElement);
+// TODO figure out good center of rotation
+//controls.autoRotate = true;
+
 const material = new THREE.MeshPhongMaterial({
   color: 0xff0000,
   side: THREE.DoubleSide,
@@ -197,8 +201,10 @@ generations.map(function (grid, level) {
   levels.push(mesh);
 });
 
-// build the visualization
+// level we are looking at
 let current = 0;
+
+// update the world
 setInterval(function () {
   // if we're done: reset everything and start again
   if (current == steps) {
@@ -209,16 +215,18 @@ setInterval(function () {
   // show next level
   levels[current].visible = true;
 
+  // change the camera
+  camera.lookAt(0, 0, current - 50);
+  camera.position.set(camera.position.x, camera.position.y, 50 + current);
+
+  controls.target.set(0, 0, current - 50);
+
   // increment
   current++;
-}, 50);
+}, 30);
 
 // TODO figure out a good camera position
-camera.position.set(0, -100, 40);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-// TODO figure out good center of rotation
-//controls.autoRotate = true;
+camera.position.set(0, -100, 50);
 
 // lights
 const directional = new THREE.DirectionalLight(0xffffff, 5);
@@ -231,9 +239,6 @@ scene.add(ambient);
 function animate() {
   // makes auto rotation possible
   controls.update();
-
-  camera.lookAt(0, 0, current);
-  camera.position.set(camera.position.x, camera.position.y, 50 + current);
 
   renderer.render(scene, camera);
   // to see how many render calls happen
