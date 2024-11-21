@@ -69,11 +69,11 @@ function count_live(state, i, j) {
 // next generation
 function next(current) {
   // empty grid
-  var next = Array.from(Array(current.length), () => new Array(current[0].length));
+  let next = Array.from(Array(current.length), () => new Array(current[0].length));
 
   // rules of Conway's game of life
-  for (var i = 0; i < next.length; i++) {
-    for (var j = 0; j < next[i].length; j++) {
+  for (let i = 0; i < next.length; i++) {
+    for (let j = 0; j < next[i].length; j++) {
       const count = count_live(current, i, j);
       // cell is alive
       if (current[i][j] == 1) {
@@ -97,7 +97,7 @@ function next(current) {
 
 function simulate(start, steps = 100) {
   let result = [start];
-  for (var i = 1; i < steps; i++) result.push(next(result[i - 1]));
+  for (let i = 1; i < steps; i++) result.push(next(result[i - 1]));
   return result;
 }
 
@@ -135,17 +135,17 @@ const material = new THREE.MeshPhongMaterial({
 });
 
 // list of the cubes in the visualization, per level
-var levels = [];
+let levels = [];
 
 generations.map(function (grid, level) {
   let boxes = [];
 
-  for (var i = 0; i < grid.length; i++) {
-    for (var j = 0; j < grid[i].length; j++) {
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
       // if the value is 0 we don't draw anything
       if (!grid[i][j]) continue;
 
-      var box = new THREE.BoxGeometry(1, 1, 1);
+      let box = new THREE.BoxGeometry(1, 1, 1);
       const M = new THREE.Matrix4().makeTranslation(
         i - grid.length / 2,
         j - grid[i].length / 2,
@@ -164,7 +164,7 @@ generations.map(function (grid, level) {
   }
 
   const merge = BufferGeometryUtils.mergeGeometries(boxes);
-  var mesh = new THREE.Mesh(merge, material);
+  let mesh = new THREE.Mesh(merge, material);
   scene.add(mesh);
   mesh.visible = false;
 
@@ -172,7 +172,7 @@ generations.map(function (grid, level) {
 });
 
 // build the visualization
-var current = 0;
+let current = 0;
 setInterval(function () {
   // if we're done: reset everything and start again
   if (current == steps) {
