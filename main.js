@@ -39,7 +39,7 @@ const gosperglidergun = await from_file("/patterns/gosperglidergun.cells");
 const glidertrain = await from_file("/patterns/glidertrain.cells");
 
 // the choices we make
-const game_of_life = gosperglidergun;
+const game_of_life = glidertrain;
 const steps = 10000;
 
 // read in a string representation
