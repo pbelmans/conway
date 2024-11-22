@@ -125,6 +125,7 @@ function next(previous) {
   return next;
 }
 
+// run the Game of Life
 function simulate(start, steps = 100) {
   let result = [start];
   for (let i = 1; i < steps; i++) result.push(next(result[i - 1]));
@@ -171,8 +172,7 @@ const material = new THREE.MeshPhongMaterial({
 // list of the cubes in the visualization, per level
 let levels = [];
 
-// draw every generation
-generations.map(function (grid, level) {
+function draw(grid, level) {
   let boxes = [];
 
   for (let i = 0; i < grid.length; i++) {
@@ -181,6 +181,8 @@ generations.map(function (grid, level) {
       if (!grid[i][j]) continue;
 
       let box = new THREE.BoxGeometry(1, 1, 1);
+
+      // we put the center of the grid at the origin
       const M = new THREE.Matrix4().makeTranslation(
         i - grid.length / 2,
         j - grid[i].length / 2,
@@ -203,11 +205,8 @@ generations.map(function (grid, level) {
   let mesh = new THREE.Mesh(merge, material);
   scene.add(mesh);
 
-  // hide every level by default
-  mesh.visible = false;
-
   levels.push(mesh);
-});
+}
 
 // level we are looking at
 let current = 0;
@@ -220,8 +219,9 @@ setInterval(function () {
     current = 0;
   }
 
-  // show next level
-  levels[current].visible = true;
+  // show or draw next level
+  if (levels?.[current]) levels[current].visible = true;
+  else draw(generations[current], current);
 
   // change the camera
   camera.lookAt(0, 0, current - 50);
@@ -229,7 +229,7 @@ setInterval(function () {
 
   controls.target.set(0, 0, current - 50);
 
-  // increment
+  // increment the level
   current++;
 }, 30);
 
