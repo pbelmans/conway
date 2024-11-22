@@ -131,8 +131,10 @@ function simulate(start, steps = 100) {
   return result;
 }
 
+// this is now clearly the bottleneck
+console.time("simulation");
 const generations = simulate(game_of_life, steps);
-//generations.forEach((generation, i) => console.log(to_string(generation)));
+console.timeEnd("simulation");
 
 /*****************
  * Visualisation *
