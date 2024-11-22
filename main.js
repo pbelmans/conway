@@ -40,7 +40,7 @@ const glidertrain = await from_file("/patterns/glidertrain.cells");
 
 // the choices we make
 const game_of_life = gosperglidergun;
-const steps = 1000;
+const steps = 10000;
 
 // read in a string representation
 function from_string(str) {
@@ -132,10 +132,8 @@ function simulate(start, steps = 100) {
   return result;
 }
 
-// this is now clearly the bottleneck
-console.time("simulation");
-const generations = simulate(game_of_life, steps);
-console.timeEnd("simulation");
+// start with 1 generation
+let generations = [game_of_life];
 
 /*****************
  * Visualisation *
@@ -221,7 +219,12 @@ setInterval(function () {
 
   // show or draw next level
   if (levels?.[current]) levels[current].visible = true;
-  else draw(generations[current], current);
+  else {
+    // compute the next generation
+    generations.push(next(generations[current]));
+    // draw it
+    draw(generations[current], current);
+  }
 
   // change the camera
   camera.lookAt(0, 0, current - 50);
