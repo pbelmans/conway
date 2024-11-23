@@ -166,7 +166,7 @@ const box_material = new THREE.MeshPhongMaterial({
   color: 0xff0000,
   side: THREE.DoubleSide,
 });
-const line_material = new THREE.LineBasicMaterial({ color: 0x555555 } );
+const line_material = new THREE.LineBasicMaterial({ color: 0x555555 });
 
 // list of the cubes in the visualization, per level
 let levels = [];
@@ -199,13 +199,19 @@ function draw(grid, generation) {
   }
 
   // merge the boxes per level for performance reasons
-  const level = new THREE.Mesh(BufferGeometryUtils.mergeGeometries(boxes), box_material);
+  const level = new THREE.Mesh(
+    BufferGeometryUtils.mergeGeometries(boxes),
+    box_material,
+  );
   scene.add(level);
 
   levels.push(level);
 
   // merge the wireframes per level for performance reasons
-  const wireframe = new THREE.LineSegments(BufferGeometryUtils.mergeGeometries(wireframes), line_material);
+  const wireframe = new THREE.LineSegments(
+    BufferGeometryUtils.mergeGeometries(wireframes),
+    line_material,
+  );
   scene.add(wireframe);
   // TODO make sure wireframes are also hidden when the simulation repeats
 }
