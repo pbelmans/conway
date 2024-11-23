@@ -28,18 +28,30 @@ async function from_file(filename) {
   return from_string(lines.join("\n"));
 }
 
-const toad = await from_file("/patterns/toad.cells");
-const transqueenbeeshuffle = await from_file("/patterns/transqueenbeeshuffle.cells");
-const p41 = await from_file("/patterns/204p41.cells");
-const p60glidershuttle = await from_file("/patterns/p60glidershuttle.cells");
-const gourmet = await from_file("/patterns/gourmet.cells");
+// default pattern
 const spider = await from_file("/patterns/spider.cells");
-const p65p48 = await from_file("/patterns/65p48.cells");
-const gosperglidergun = await from_file("/patterns/gosperglidergun.cells");
-const glidertrain = await from_file("/patterns/glidertrain.cells");
 
-// the choices we make
-const game_of_life = glidertrain;
+// read in GET parameters
+function make_dict(string) {
+  let parameters = {};
+  let pieces = string.split("&");
+
+  for (let i = 0; i < pieces.length; i++) {
+    let pair = pieces[i].split("=");
+    parameters[pair[0]] = pair[1];
+  }
+
+  return parameters;
+}
+
+const string = window.location.search.substr(1);
+const parameters = make_dict(string);
+
+// the choices we make: if nothing is set we use a preset, else we load
+const game_of_life = !parameters?.["pattern"]
+  ? spider
+  : await from_file("/patterns/" + parameters["pattern"] + ".cells");
+// the number of steps the simulation will run before restarting
 const steps = 10000;
 
 // read in a string representation
