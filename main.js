@@ -162,16 +162,18 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // TODO figure out good center of rotation
 //controls.autoRotate = true;
 
-const material = new THREE.MeshPhongMaterial({
+const box_material = new THREE.MeshPhongMaterial({
   color: 0xff0000,
   side: THREE.DoubleSide,
 });
+const line_material = new THREE.LineBasicMaterial({ color: 0x555555 } );
 
 // list of the cubes in the visualization, per level
 let levels = [];
 
-function draw(grid, level) {
+function draw(grid, generation) {
   let boxes = [];
+  let wireframes = [];
 
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[i].length; j++) {
@@ -181,29 +183,31 @@ function draw(grid, level) {
       let box = new THREE.BoxGeometry(1, 1, 1);
 
       // we put the center of the grid at the origin
-      const M = new THREE.Matrix4().makeTranslation(
-        i - grid.length / 2,
-        j - grid[i].length / 2,
-        level,
-      );
       box.applyMatrix4(
         new THREE.Matrix4().makeTranslation(
           i - grid.length / 2,
           j - grid[i].length / 2,
-          level,
+          generation,
         ),
       );
-
       boxes.push(box);
+
+      // include a wireframe
+      const edges = new THREE.EdgesGeometry(box);
+      wireframes.push(edges);
     }
   }
 
   // merge the boxes per level for performance reasons
-  const merge = BufferGeometryUtils.mergeGeometries(boxes);
-  let mesh = new THREE.Mesh(merge, material);
-  scene.add(mesh);
+  const level = new THREE.Mesh(BufferGeometryUtils.mergeGeometries(boxes), box_material);
+  scene.add(level);
 
-  levels.push(mesh);
+  levels.push(level);
+
+  // merge the wireframes per level for performance reasons
+  const wireframe = new THREE.LineSegments(BufferGeometryUtils.mergeGeometries(wireframes), line_material);
+  scene.add(wireframe);
+  // TODO make sure wireframes are also hidden when the simulation repeats
 }
 
 // level we are looking at
@@ -234,10 +238,10 @@ setInterval(function () {
 
   // increment the level
   current++;
-}, 30);
+}, 200);
 
 // TODO figure out a good camera position
-camera.position.set(0, -100, 50);
+camera.position.set(0, -30, 20);
 
 // lights
 const directional = new THREE.DirectionalLight(0xffffff, 5);
