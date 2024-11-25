@@ -10,7 +10,7 @@ const game_of_life = !parameters?.["pattern"]
   ? await from_file("/patterns/spider.cells")
   : await from_file("/patterns/" + parameters["pattern"] + ".cells");
 // the number of steps the simulation will run before restarting
-const steps = 10000;
+const steps = !parameters?.["steps"] ? 10000 : parseInt(parameters["steps"]);
 // the number of milliseconds a tick takes
 const duration = !parameters?.["duration"] ? 40 : parseInt(parameters["duration"]);
 
