@@ -181,10 +181,12 @@ const line_material = new THREE.LineBasicMaterial({ color: 0x555555 });
 
 // list of the cubes in the visualization, per level
 let levels = [];
+// list of the wireframes in the visualization, per level
+let wireframes = [];
 
 function draw(grid, generation) {
   let boxes = [];
-  let wireframes = [];
+  let wireframe = [];
 
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[i].length; j++) {
@@ -205,7 +207,7 @@ function draw(grid, generation) {
 
       // include a wireframe
       const edges = new THREE.EdgesGeometry(box);
-      wireframes.push(edges);
+      wireframe.push(edges);
     }
   }
 
@@ -219,12 +221,13 @@ function draw(grid, generation) {
   levels.push(level);
 
   // merge the wireframes per level for performance reasons
-  const wireframe = new THREE.LineSegments(
-    BufferGeometryUtils.mergeGeometries(wireframes),
+  const lines = new THREE.LineSegments(
+    BufferGeometryUtils.mergeGeometries(wireframe),
     line_material,
   );
-  scene.add(wireframe);
-  // TODO make sure wireframes are also hidden when the simulation repeats
+  scene.add(lines);
+
+  wireframes.push(lines);
 }
 
 // level we are looking at
@@ -235,11 +238,16 @@ setInterval(function () {
   // if we're done: reset everything and start again
   if (current == steps) {
     levels.map((level) => (level.visible = false));
+    wireframes.map((wireframe) => (wireframe.visible = false));
+
     current = 0;
   }
 
   // show or draw next level
-  if (levels?.[current]) levels[current].visible = true;
+  if (levels?.[current]) {
+    levels[current].visible = true;
+    wireframes[current].visible = true;
+  }
   else {
     // compute the next generation
     generations.push(next(generations[current]));
