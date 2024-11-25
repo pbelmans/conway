@@ -256,7 +256,7 @@ setInterval(function () {
 
   // increment the level
   current++;
-}, 200);
+}, 20);
 
 // TODO figure out a good camera position
 camera.position.set(0, -30, 20);
