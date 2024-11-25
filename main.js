@@ -2,6 +2,31 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
 
+const string = window.location.search.substr(1);
+const parameters = make_dict(string);
+
+// the choices we make: if nothing is set we use a preset, else we load
+const game_of_life = !parameters?.["pattern"]
+  ? await from_file("/patterns/spider.cells")
+  : await from_file("/patterns/" + parameters["pattern"] + ".cells");
+// the number of steps the simulation will run before restarting
+const steps = 10000;
+// the number of milliseconds a tick takes
+const duration = !parameters?.["duration"] ? 40 : parseInt(parameters["duration"]);
+
+// read in GET parameters
+function make_dict(string) {
+  let parameters = {};
+  let pieces = string.split("&");
+
+  for (let i = 0; i < pieces.length; i++) {
+    let pair = pieces[i].split("=");
+    parameters[pair[0]] = pair[1];
+  }
+
+  return parameters;
+}
+
 /*************************
  * Conway's game of life *
  *************************/
@@ -27,32 +52,6 @@ async function from_file(filename) {
 
   return from_string(lines.join("\n"));
 }
-
-// default pattern
-const spider = await from_file("/patterns/spider.cells");
-
-// read in GET parameters
-function make_dict(string) {
-  let parameters = {};
-  let pieces = string.split("&");
-
-  for (let i = 0; i < pieces.length; i++) {
-    let pair = pieces[i].split("=");
-    parameters[pair[0]] = pair[1];
-  }
-
-  return parameters;
-}
-
-const string = window.location.search.substr(1);
-const parameters = make_dict(string);
-
-// the choices we make: if nothing is set we use a preset, else we load
-const game_of_life = !parameters?.["pattern"]
-  ? spider
-  : await from_file("/patterns/" + parameters["pattern"] + ".cells");
-// the number of steps the simulation will run before restarting
-const steps = 10000;
 
 // read in a string representation
 function from_string(str) {
@@ -256,7 +255,7 @@ setInterval(function () {
 
   // increment the level
   current++;
-}, 20);
+}, duration);
 
 // TODO figure out a good camera position
 camera.position.set(0, -30, 20);
