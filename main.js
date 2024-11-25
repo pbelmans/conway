@@ -247,8 +247,7 @@ setInterval(function () {
   if (levels?.[current]) {
     levels[current].visible = true;
     wireframes[current].visible = true;
-  }
-  else {
+  } else {
     // compute the next generation
     generations.push(next(generations[current]));
     // draw it
